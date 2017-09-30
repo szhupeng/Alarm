@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Alarm</string>
+
+    <!-- DO NOT TRANSLATE -->
+    <string name="radial_numbers_typeface" translatable="false">sans-serif</string>
+    <!-- DO NOT TRANSLATE -->
+    <string name="sans_serif" translatable="false">sans-serif</string>
+</resources>
