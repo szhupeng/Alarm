@@ -2,48 +2,42 @@ package space.zhupeng.alarm.time;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.IntDef;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import static space.zhupeng.alarm.time.Timepoint.TYPE.HOUR;
-import static space.zhupeng.alarm.time.Timepoint.TYPE.MINUTE;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 
 /**
- * Simple utility class that represents a time in the day up to second precision
+ * Simple utility class that represents a time
  * The time input is expected to use 24 hour mode.
  * Fields are modulo'd into their correct ranges.
  * It does not handle timezones.
- * <p>
- * Created by wdullaer on 13/10/15.
  */
 @SuppressWarnings("WeakerAccess")
 public class Timepoint implements Parcelable, Comparable<Timepoint> {
+    public static final int HOUR = 0;
+    public static final int MINUTE = 1;
+
     private int hour;
     private int minute;
-    private int second;
 
-    public enum TYPE {
-        HOUR,
-        MINUTE,
-        SECOND
+    @IntDef({HOUR, MINUTE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface TYPE {
     }
 
     public Timepoint(Timepoint time) {
-        this(time.hour, time.minute, time.second);
-    }
-
-    public Timepoint(@IntRange(from = 0, to = 23) int hour,
-                     @IntRange(from = 0, to = 59) int minute,
-                     @IntRange(from = 0, to = 59) int second) {
-        this.hour = hour % 24;
-        this.minute = minute % 60;
-        this.second = second % 60;
+        this(time.hour, time.minute);
     }
 
     public Timepoint(@IntRange(from = 0, to = 23) int hour,
                      @IntRange(from = 0, to = 59) int minute) {
-        this(hour, minute, 0);
+        this.hour = hour % 24;
+        this.minute = minute % 60;
     }
 
     public Timepoint(@IntRange(from = 0, to = 23) int hour) {
@@ -53,7 +47,6 @@ public class Timepoint implements Parcelable, Comparable<Timepoint> {
     public Timepoint(Parcel in) {
         hour = in.readInt();
         minute = in.readInt();
-        second = in.readInt();
     }
 
     @IntRange(from = 0, to = 23)
@@ -66,35 +59,12 @@ public class Timepoint implements Parcelable, Comparable<Timepoint> {
         return minute;
     }
 
-    @IntRange(from = 0, to = 59)
-    public int getSecond() {
-        return second;
-    }
-
-    public boolean isAM() {
-        return hour < 12;
-    }
-
-    public boolean isPM() {
-        return !isAM();
-    }
-
-    public void setAM() {
-        if (hour >= 12) hour = hour % 12;
-    }
-
-    public void setPM() {
-        if (hour < 12) hour = (hour + 12) % 24;
-    }
-
-    public void add(TYPE type, int value) {
+    public void add(@TYPE int type, int value) {
         if (type == MINUTE) value *= 60;
         if (type == HOUR) value *= 3600;
         value += toSeconds();
 
         switch (type) {
-            case SECOND:
-                second = (value % 3600) % 60;
             case MINUTE:
                 minute = (value % 3600) / 60;
             case HOUR:
@@ -102,20 +72,16 @@ public class Timepoint implements Parcelable, Comparable<Timepoint> {
         }
     }
 
-    public int get(@NonNull TYPE type) {
-        switch (type) {
-            case SECOND:
-                return getSecond();
-            case MINUTE:
-                return getMinute();
-            case HOUR:
-            default: // Makes the compiler happy
-                return getHour();
+    public int get(@TYPE int type) {
+        if (MINUTE == type) {
+            return getMinute();
+        } else {
+            return getHour();
         }
     }
 
     public int toSeconds() {
-        return 3600 * hour + 60 * minute + second;
+        return 3600 * hour + 60 * minute;
     }
 
     @Override
@@ -133,12 +99,10 @@ public class Timepoint implements Parcelable, Comparable<Timepoint> {
         return hashCode() == timepoint.hashCode();
     }
 
-    public boolean equals(@Nullable Timepoint time, @NonNull TYPE resolution) {
+    public boolean equals(@Nullable Timepoint time, @TYPE int resolution) {
         if (time == null) return false;
         boolean output = true;
         switch (resolution) {
-            case SECOND:
-                output = output && time.getSecond() == getSecond();
             case MINUTE:
                 output = output && time.getMinute() == getMinute();
             case HOUR:
@@ -156,7 +120,6 @@ public class Timepoint implements Parcelable, Comparable<Timepoint> {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(hour);
         out.writeInt(minute);
-        out.writeInt(second);
     }
 
     @Override
@@ -164,8 +127,7 @@ public class Timepoint implements Parcelable, Comparable<Timepoint> {
         return 0;
     }
 
-    public static final Creator<Timepoint> CREATOR
-            = new Creator<Timepoint>() {
+    public static final Creator<Timepoint> CREATOR = new Creator<Timepoint>() {
         public Timepoint createFromParcel(Parcel in) {
             return new Timepoint(in);
         }
@@ -174,9 +136,4 @@ public class Timepoint implements Parcelable, Comparable<Timepoint> {
             return new Timepoint[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "" + hour + "h " + minute + "m " + second + "s";
-    }
 }

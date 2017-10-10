@@ -3,59 +3,88 @@
     android:id="@+id/dialog_time_picker"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_white"
-    android:orientation="vertical"
-    android:paddingBottom="20dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp"
-    android:paddingTop="20dp">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
-        android:text="音乐闹钟"
-        android:textColor="@android:color/black"
-        android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#D71B41"
-        android:gravity="center"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        android:text="00:00"
-        android:textColor="@android:color/white"
-        android:textSize="42sp" />
-
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="15dp" />
-
-    <space.zhupeng.alarm.time.RadialPickerLayout
-        android:id="@+id/time_picker"
-        android:layout_width="300dp"
-        android:layout_height="270dp"
-        android:layout_gravity="center"
-        android:focusable="true"
-        android:focusableInTouchMode="true" />
-
-    <android.support.v4.widget.Space
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_picker"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_picker_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="10dp"
+            android:text="音乐闹钟"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:id="@+id/ll_time_display"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#D71B41"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                android:text="00"
+                android:textColor="@android:color/white"
+                android:textSize="42sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=":"
+                android:textColor="@android:color/white"
+                android:textSize="42sp" />
+
+            <TextView
+                android:id="@+id/tv_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+                android:text="00"
+                android:textColor="@android:color/white"
+                android:textSize="42sp" />
+        </LinearLayout>
+
+        <space.zhupeng.alarm.time.RadialPickerLayout
+            android:id="@+id/time_picker"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingBottom="15dp"
+            android:paddingTop="15dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_picker_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
         android:background="@android:color/transparent"
         android:gravity="end|right"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
             android:layout_marginRight="28dp"
             android:gravity="center"
             android:text="取消"
@@ -64,7 +93,7 @@
         <TextView
             android:id="@+id/btn_ok"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
             android:layout_marginRight="10dp"
             android:gravity="center"
             android:text="确定"

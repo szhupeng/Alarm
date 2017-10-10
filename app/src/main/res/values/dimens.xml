@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="circle_radius_multiplier" format="float" translatable="false" type="string">0.85
+    </item>
+    <item name="selection_radius_multiplier" format="float" translatable="false" type="string">
+        0.16
+    </item>
+    <item name="numbers_radius_multiplier_normal" format="float" translatable="false" type="string">
+        0.81
+    </item>
+    <item name="numbers_radius_multiplier_inner" format="float" translatable="false" type="string">
+        0.60
+    </item>
+    <item name="numbers_radius_multiplier_outer" format="float" translatable="false" type="string">
+        0.83
+    </item>
+    <item name="text_size_multiplier_normal" format="float" translatable="false" type="string">
+        0.12
+    </item>
+    <item name="text_size_multiplier_inner" format="float" translatable="false" type="string">0.11
+    </item>
+    <item name="text_size_multiplier_outer" format="float" translatable="false" type="string">0.08
+    </item>
+</resources>

@@ -12,18 +12,18 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.View;
 
-import com.wdullaer.materialdatetimepicker.R;
+import space.zhupeng.alarm.R;
 
 /**
  * View to show what number is selected. This will draw a blue circle over the number, with a blue
  * line coming from the center of the main circle to the edge of the blue selection.
  */
+@SuppressWarnings("all")
 public class RadialSelectorView extends View {
     private static final String TAG = "RadialSelectorView";
 
     // Alpha level for selected circle.
     private static final int SELECTED_ALPHA = Utils.SELECTED_ALPHA;
-    private static final int SELECTED_ALPHA_THEME_DARK = Utils.SELECTED_ALPHA_THEME_DARK;
     // Alpha level for the line.
     private static final int FULL_ALPHA = Utils.FULL_ALPHA;
 
@@ -33,13 +33,11 @@ public class RadialSelectorView extends View {
     private boolean mDrawValuesReady;
 
     private float mCircleRadiusMultiplier;
-    private float mAmPmCircleRadiusMultiplier;
     private float mInnerNumbersRadiusMultiplier;
     private float mOuterNumbersRadiusMultiplier;
     private float mNumbersRadiusMultiplier;
     private float mSelectionRadiusMultiplier;
     private float mAnimationRadiusMultiplier;
-    private boolean mIs24HourMode;
     private boolean mHasInnerCircle;
     private int mSelectionAlpha;
 
@@ -88,33 +86,25 @@ public class RadialSelectorView extends View {
         mPaint.setColor(accentColor);
         mPaint.setAntiAlias(true);
 
-        mSelectionAlpha = controller.isThemeDark() ? SELECTED_ALPHA_THEME_DARK : SELECTED_ALPHA;
+        mSelectionAlpha = SELECTED_ALPHA;
 
         // Calculate values for the circle radius size.
-        mIs24HourMode = controller.is24HourMode();
-        if (mIs24HourMode || controller.getVersion() != TimePickerDialog.Version.VERSION_1) {
-            mCircleRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_circle_radius_multiplier_24HourMode));
-        } else {
-            mCircleRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_circle_radius_multiplier));
-            mAmPmCircleRadiusMultiplier =
-                    Float.parseFloat(res.getString(R.string.mdtp_ampm_circle_radius_multiplier));
-        }
+        mCircleRadiusMultiplier = Float.parseFloat(
+                res.getString(R.string.circle_radius_multiplier));
 
         // Calculate values for the radius size(s) of the numbers circle(s).
         mHasInnerCircle = hasInnerCircle;
         if (hasInnerCircle) {
             mInnerNumbersRadiusMultiplier =
-                    Float.parseFloat(res.getString(R.string.mdtp_numbers_radius_multiplier_inner));
+                    Float.parseFloat(res.getString(R.string.numbers_radius_multiplier_inner));
             mOuterNumbersRadiusMultiplier =
-                    Float.parseFloat(res.getString(R.string.mdtp_numbers_radius_multiplier_outer));
+                    Float.parseFloat(res.getString(R.string.numbers_radius_multiplier_outer));
         } else {
             mNumbersRadiusMultiplier =
-                    Float.parseFloat(res.getString(R.string.mdtp_numbers_radius_multiplier_normal));
+                    Float.parseFloat(res.getString(R.string.numbers_radius_multiplier_normal));
         }
         mSelectionRadiusMultiplier =
-                Float.parseFloat(res.getString(R.string.mdtp_selection_radius_multiplier));
+                Float.parseFloat(res.getString(R.string.selection_radius_multiplier));
 
         // Calculate values for the transition mid-way states.
         mAnimationRadiusMultiplier = 1;
@@ -252,14 +242,6 @@ public class RadialSelectorView extends View {
             mXCenter = getWidth() / 2;
             mYCenter = getHeight() / 2;
             mCircleRadius = (int) (Math.min(mXCenter, mYCenter) * mCircleRadiusMultiplier);
-
-            if (!mIs24HourMode) {
-                // We'll need to draw the AM/PM circles, so the main circle will need to have
-                // a slightly higher center. To keep the entire view centered vertically, we'll
-                // have to push it up by half the radius of the AM/PM circles.
-                int amPmCircleRadius = (int) (mCircleRadius * mAmPmCircleRadiusMultiplier);
-                mYCenter -= amPmCircleRadius * 0.75;
-            }
 
             mSelectionRadius = (int) (mCircleRadius * mSelectionRadiusMultiplier);
 

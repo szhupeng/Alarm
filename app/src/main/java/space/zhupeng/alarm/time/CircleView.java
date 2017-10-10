@@ -8,7 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
-import com.wdullaer.materialdatetimepicker.R;
+import space.zhupeng.alarm.R;
 
 /**
  * Draws a simple white circle on which the numbers will be drawn.
@@ -17,11 +17,9 @@ public class CircleView extends View {
     private static final String TAG = "CircleView";
 
     private final Paint mPaint = new Paint();
-    private boolean mIs24HourMode;
     private int mCircleColor;
     private int mDotColor;
     private float mCircleRadiusMultiplier;
-    private float mAmPmCircleRadiusMultiplier;
     private boolean mIsInitialized;
 
     private boolean mDrawValuesReady;
@@ -43,22 +41,12 @@ public class CircleView extends View {
 
         Resources res = context.getResources();
 
-        int colorRes = controller.isThemeDark() ? R.color.mdtp_circle_background_dark_theme : R.color.mdtp_circle_color;
-        mCircleColor = ContextCompat.getColor(context, colorRes);
+        mCircleColor = ContextCompat.getColor(context, R.color.circle_color);
         mDotColor = controller.getAccentColor();
         mPaint.setAntiAlias(true);
 
-        mIs24HourMode = controller.is24HourMode();
-        if (mIs24HourMode || controller.getVersion() != TimePickerDialog.Version.VERSION_1) {
-            mCircleRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_circle_radius_multiplier_24HourMode));
-        } else {
-            mCircleRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_circle_radius_multiplier));
-            mAmPmCircleRadiusMultiplier =
-                    Float.parseFloat(res.getString(R.string.mdtp_ampm_circle_radius_multiplier));
-        }
-
+        mCircleRadiusMultiplier = Float.parseFloat(
+                res.getString(R.string.circle_radius_multiplier));
         mIsInitialized = true;
     }
 
@@ -73,14 +61,6 @@ public class CircleView extends View {
             mXCenter = getWidth() / 2;
             mYCenter = getHeight() / 2;
             mCircleRadius = (int) (Math.min(mXCenter, mYCenter) * mCircleRadiusMultiplier);
-
-            if (!mIs24HourMode) {
-                // We'll need to draw the AM/PM circles, so the main circle will need to have
-                // a slightly higher center. To keep the entire view centered vertically, we'll
-                // have to push it up by half the radius of the AM/PM circles.
-                int amPmCircleRadius = (int) (mCircleRadius * mAmPmCircleRadiusMultiplier);
-                mYCenter -= amPmCircleRadius*0.75;
-            }
 
             mDrawValuesReady = true;
         }

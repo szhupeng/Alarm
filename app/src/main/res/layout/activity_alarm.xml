@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="50dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="17:20"
+        android:textColor="@android:color/white"
+        android:textSize="52sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="音乐闹钟"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+    <space.zhupeng.alarm.RippleView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5分钟后提醒"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:strokeColor="@android:color/white"
+        app:strokeWidth="1dp" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/tv_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="6dp"
+        android:text="上滑关闭闹钟"
+        android:textColor="@android:color/white" />
+
+    <android.support.v4.widget.Space
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+</LinearLayout>

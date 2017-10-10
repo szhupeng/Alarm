@@ -20,6 +20,7 @@ import space.zhupeng.alarm.R;
 /**
  * A view to show a series of numbers in a circular pattern.
  */
+@SuppressWarnings("all")
 public class RadialTextsView extends View {
     private final static String TAG = "RadialTextsView";
 
@@ -38,10 +39,8 @@ public class RadialTextsView extends View {
     private Typeface mTypefaceRegular;
     private String[] mTexts;
     private String[] mInnerTexts;
-    private boolean mIs24HourMode;
     private boolean mHasInnerCircle;
     private float mCircleRadiusMultiplier;
-    private float mAmPmCircleRadiusMultiplier;
     private float mNumbersRadiusMultiplier;
     private float mInnerNumbersRadiusMultiplier;
     private float mTextSizeMultiplier;
@@ -79,64 +78,55 @@ public class RadialTextsView extends View {
         Resources res = context.getResources();
 
         // Set up the paint.
-        int textColorRes = controller.isThemeDark() ? R.color.mdtp_white : R.color.mdtp_numbers_text_color;
+        int textColorRes = R.color.time_text_color;
         mPaint.setColor(ContextCompat.getColor(context, textColorRes));
-        String typefaceFamily = res.getString(R.string.mdtp_radial_numbers_typeface);
+        String typefaceFamily = res.getString(R.string.radial_numbers_typeface);
         mTypefaceLight = Typeface.create(typefaceFamily, Typeface.NORMAL);
-        String typefaceFamilyRegular = res.getString(R.string.mdtp_sans_serif);
+        String typefaceFamilyRegular = res.getString(R.string.sans_serif);
         mTypefaceRegular = Typeface.create(typefaceFamilyRegular, Typeface.NORMAL);
         mPaint.setAntiAlias(true);
         mPaint.setTextAlign(Align.CENTER);
 
         // Set up the selected paint
-        int selectedTextColor = ContextCompat.getColor(context, R.color.mdtp_white);
+        int selectedTextColor = ContextCompat.getColor(context, android.R.color.white);
         mSelectedPaint.setColor(selectedTextColor);
         mSelectedPaint.setAntiAlias(true);
         mSelectedPaint.setTextAlign(Align.CENTER);
 
         // Set up the inactive paint
-        int inactiveColorRes = controller.isThemeDark() ? R.color.mdtp_date_picker_text_disabled_dark_theme
-                : R.color.mdtp_date_picker_text_disabled;
+        int inactiveColorRes = R.color.text_disabled;
         mInactivePaint.setColor(ContextCompat.getColor(context, inactiveColorRes));
         mInactivePaint.setAntiAlias(true);
         mInactivePaint.setTextAlign(Align.CENTER);
 
         mTexts = texts;
         mInnerTexts = innerTexts;
-        mIs24HourMode = controller.is24HourMode();
         mHasInnerCircle = (innerTexts != null);
 
         // Calculate the radius for the main circle.
-        if (mIs24HourMode || controller.getVersion() != TimePickerDialog.Version.VERSION_1) {
-            mCircleRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_circle_radius_multiplier_24HourMode));
-        } else {
-            mCircleRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_circle_radius_multiplier));
-            mAmPmCircleRadiusMultiplier =
-                    Float.parseFloat(res.getString(R.string.mdtp_ampm_circle_radius_multiplier));
-        }
+        mCircleRadiusMultiplier = Float.parseFloat(
+                res.getString(R.string.circle_radius_multiplier));
 
         // Initialize the widths and heights of the grid, and calculate the values for the numbers.
         mTextGridHeights = new float[7];
         mTextGridWidths = new float[7];
         if (mHasInnerCircle) {
             mNumbersRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_numbers_radius_multiplier_outer));
+                    res.getString(R.string.numbers_radius_multiplier_outer));
             mTextSizeMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_text_size_multiplier_outer));
+                    res.getString(R.string.text_size_multiplier_outer));
             mInnerNumbersRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_numbers_radius_multiplier_inner));
+                    res.getString(R.string.numbers_radius_multiplier_inner));
             mInnerTextSizeMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_text_size_multiplier_inner));
+                    res.getString(R.string.text_size_multiplier_inner));
 
             mInnerTextGridHeights = new float[7];
             mInnerTextGridWidths = new float[7];
         } else {
             mNumbersRadiusMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_numbers_radius_multiplier_normal));
+                    res.getString(R.string.numbers_radius_multiplier_normal));
             mTextSizeMultiplier = Float.parseFloat(
-                    res.getString(R.string.mdtp_text_size_multiplier_normal));
+                    res.getString(R.string.text_size_multiplier_normal));
         }
 
         mAnimationRadiusMultiplier = 1;
@@ -187,13 +177,6 @@ public class RadialTextsView extends View {
             mXCenter = getWidth() / 2;
             mYCenter = getHeight() / 2;
             mCircleRadius = Math.min(mXCenter, mYCenter) * mCircleRadiusMultiplier;
-            if (!mIs24HourMode) {
-                // We'll need to draw the AM/PM circles, so the main circle will need to have
-                // a slightly higher center. To keep the entire view centered vertically, we'll
-                // have to push it up by half the radius of the AM/PM circles.
-                float amPmCircleRadius = mCircleRadius * mAmPmCircleRadiusMultiplier;
-                mYCenter -= amPmCircleRadius * 0.75;
-            }
 
             mTextSize = mCircleRadius * mTextSizeMultiplier;
             if (mHasInnerCircle) {
